@@ -109,7 +109,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 				InputStream is = openInputStream( mUri );
 				OutputStream os = new FileOutputStream( dst_file );
-				org.apache.commons.io.IOUtils.copy( is, os );
+                exif.writeExif(is,os);
 				is.close();
 				os.close();
 
@@ -117,8 +117,6 @@ public class MainActivity extends Activity implements OnClickListener {
 
 				// exif.writeExif( tmp_file.getAbsolutePath(), dst_file.getAbsolutePath() );
 				// exif.writeExif( openInputStream( mUri ), dst_file.getAbsolutePath() );
-
-				exif.writeExif( dst_file.getAbsolutePath() );
 
 				long t2 = SystemClock.uptimeMillis();
 				Log.d( LOG_TAG, "saveImage time: " + (t2-t1) + "ms" );

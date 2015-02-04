@@ -18,7 +18,6 @@ package it.sephiroth.android.library.exif2;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.SystemClock;
 import android.util.Log;
 import android.util.SparseIntArray;
 
@@ -624,7 +623,7 @@ public class ExifInterface {
 	 *
 	 * {@link ExifTag#TYPE_RATIONAL}
 	 * @since EXIF 2.3
-	 * @see it.sephiroth.android.library.exif2.ExifUtil#processLensSpecifications(Rational[])
+	 * @see com.smlia.byegeotag.library.exif2.ExifUtil#processLensSpecifications(Rational[])
 	 */
 	public static final int TAG_LENS_SPECS = defineTag( IfdId.TYPE_IFD_EXIF, (short) 0xA432 );
 
@@ -661,7 +660,7 @@ public class ExifInterface {
 	 * </ul>
 	 *
 	 * {@link ExifTag#TYPE_UNSIGNED_SHORT}
-	 * @see it.sephiroth.android.library.exif2.ExifInterface.SensitivityType
+	 * @see com.smlia.byegeotag.library.exif2.ExifInterface.SensitivityType
 	 * @since EXIF 2.3
 	 */
 	public static final int TAG_SENSITIVITY_TYPE = defineTag( IfdId.TYPE_IFD_EXIF, (short) 0x8830 );
@@ -936,7 +935,7 @@ public class ExifInterface {
 	 * existing exif tags.
 	 *
 	 * @param inFileName a string representing the filepath to jpeg file.
-	 * @param options bit flag which defines which type of tags to process, see {@link it.sephiroth.android.library.exif2.ExifInterface.Options}
+	 * @param options bit flag which defines which type of tags to process, see {@link com.smlia.byegeotag.library.exif2.ExifInterface.Options}
 	 * @see #readExif(java.io.InputStream, int)
 	 * @throws java.io.IOException
 	 */
@@ -968,7 +967,7 @@ public class ExifInterface {
 	 * </pre>
 	 *
 	 * @param inStream an InputStream containing a jpeg compressed image.
-	 * @param options bit flag which defines which type of tags to process, see {@link it.sephiroth.android.library.exif2.ExifInterface.Options}
+	 * @param options bit flag which defines which type of tags to process, see {@link com.smlia.byegeotag.library.exif2.ExifInterface.Options}
 	 * @throws java.io.IOException
 	 */
 	@SuppressWarnings( "unused" )
@@ -1117,6 +1116,20 @@ public class ExifInterface {
 		output.close();
 	}
 
+    public void writeExif( final InputStream input, final OutputStream output ) throws IOException {
+
+        // inpur is used *ONLY* to read the image uncompressed data
+        // exif tags are not used here
+
+        writeExif_internal( input, output, mData );
+
+        // 7. write the rest of the image..
+        IOUtils.copy( input, output );
+
+        output.flush();
+        output.close();
+    }
+
 	@SuppressWarnings( "unused" )
 	public void writeExif( final Bitmap input, final String dstFilename, int quality ) throws IOException {
 		Log.i( TAG, "writeExif: " + dstFilename );
@@ -1149,8 +1162,10 @@ public class ExifInterface {
 
 		// 6. write all the sections from the srcFilename
 		if( sections.get( 0 ).type != JpegHeader.TAG_M_JFIF ) {
-			Log.w( TAG, "first section is not a JFIF or EXIF tag" );
-			output.write( JpegHeader.JFIF_HEADER );
+			//Log.w( TAG, "first section is not a JFIF or EXIF tag" );
+
+            //Not need JFIF header by SMLIA
+			//output.write( JpegHeader.JFIF_HEADER );
 		}
 
 		// 6.1 write the *new* EXIF tag
@@ -1159,13 +1174,20 @@ public class ExifInterface {
 		eo.writeExifData( output );
 
 		// 6.2 write all the sections except for the SOS ( start of scan )
+
 		for( int a = 0; a < sections.size() - 1; a++ ) {
 			ExifParser.Section current = sections.get( a );
-			// Log.v( TAG, "writing section.. " + String.format( "0x%2X", current.type ) );
-			output.write( 0xFF );
-			output.write( current.type );
-			output.write( current.data );
+			//Log.v( TAG, "writing section.. " + String.format( "0x%2X", current.type ) );
+            if ( current.type == 0xE1 ){
+                //Skip Exif section due to duplicate by SMLIA
+            }else{
+                output.write( 0xFF );
+                output.write( current.type );
+                output.write( current.data );
+            }
+
 		}
+
 
 		// 6.3 write the last SOS marker
 		ExifParser.Section current = sections.get( sections.size() - 1 );
@@ -1193,7 +1215,7 @@ public class ExifInterface {
 	 * object's existing exif tags.
 	 *
 	 * @param jpeg a byte array containing a jpeg compressed image.
-	 * @param options bit flag which defines which type of tags to process, see {@link it.sephiroth.android.library.exif2.ExifInterface.Options}
+	 * @param options bit flag which defines which type of tags to process, see {@link com.smlia.byegeotag.library.exif2.ExifInterface.Options}
 	 * @throws java.io.IOException
 	 * @see #readExif(java.io.InputStream, int)
 	 */

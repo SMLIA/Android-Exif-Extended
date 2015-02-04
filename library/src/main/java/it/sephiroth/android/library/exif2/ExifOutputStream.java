@@ -161,7 +161,7 @@ class ExifOutputStream {
 			dataOutputStream.writeShort( tag.getTagId() );
 			dataOutputStream.writeShort( tag.getDataType() );
 			dataOutputStream.writeInt( tag.getComponentCount() );
-			// Log.v( TAG, "\n" + tag.toString() );
+			//Log.v( TAG, "\n" + tag.toString() );
 			if( tag.getDataSize() > 4 ) {
 				dataOutputStream.writeInt( tag.getOffset() );
 			}
