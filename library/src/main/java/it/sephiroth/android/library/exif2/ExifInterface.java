@@ -623,7 +623,7 @@ public class ExifInterface {
 	 *
 	 * {@link ExifTag#TYPE_RATIONAL}
 	 * @since EXIF 2.3
-	 * @see com.smlia.byegeotag.library.exif2.ExifUtil#processLensSpecifications(Rational[])
+	 * @see it.sephiroth.android.library.exif2.ExifUtil#processLensSpecifications(Rational[])
 	 */
 	public static final int TAG_LENS_SPECS = defineTag( IfdId.TYPE_IFD_EXIF, (short) 0xA432 );
 
@@ -660,7 +660,7 @@ public class ExifInterface {
 	 * </ul>
 	 *
 	 * {@link ExifTag#TYPE_UNSIGNED_SHORT}
-	 * @see com.smlia.byegeotag.library.exif2.ExifInterface.SensitivityType
+	 * @see it.sephiroth.android.library.exif2.ExifInterface.SensitivityType
 	 * @since EXIF 2.3
 	 */
 	public static final int TAG_SENSITIVITY_TYPE = defineTag( IfdId.TYPE_IFD_EXIF, (short) 0x8830 );
@@ -935,7 +935,7 @@ public class ExifInterface {
 	 * existing exif tags.
 	 *
 	 * @param inFileName a string representing the filepath to jpeg file.
-	 * @param options bit flag which defines which type of tags to process, see {@link com.smlia.byegeotag.library.exif2.ExifInterface.Options}
+	 * @param options bit flag which defines which type of tags to process, see {@link it.sephiroth.android.library.exif2.ExifInterface.Options}
 	 * @see #readExif(java.io.InputStream, int)
 	 * @throws java.io.IOException
 	 */
@@ -967,7 +967,7 @@ public class ExifInterface {
 	 * </pre>
 	 *
 	 * @param inStream an InputStream containing a jpeg compressed image.
-	 * @param options bit flag which defines which type of tags to process, see {@link com.smlia.byegeotag.library.exif2.ExifInterface.Options}
+	 * @param options bit flag which defines which type of tags to process, see {@link it.sephiroth.android.library.exif2.ExifInterface.Options}
 	 * @throws java.io.IOException
 	 */
 	@SuppressWarnings( "unused" )
@@ -1215,7 +1215,7 @@ public class ExifInterface {
 	 * object's existing exif tags.
 	 *
 	 * @param jpeg a byte array containing a jpeg compressed image.
-	 * @param options bit flag which defines which type of tags to process, see {@link com.smlia.byegeotag.library.exif2.ExifInterface.Options}
+	 * @param options bit flag which defines which type of tags to process, see {@link it.sephiroth.android.library.exif2.ExifInterface.Options}
 	 * @throws java.io.IOException
 	 * @see #readExif(java.io.InputStream, int)
 	 */
